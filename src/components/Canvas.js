@@ -5,7 +5,6 @@ function Canvas() {
     const canvasRef = useRef(null)
 
     useEffect(() => {
-
         // generate 32,768 discrete colors
         function generateColors(steps, canvasHeight) {
             const colors = []
@@ -14,21 +13,18 @@ function Canvas() {
                 for (let y = 1; y <= steps; y++) {
                     for (let z = 1; z <= steps; z++) {
                         subColors.push(`rgb(${x * 256 / steps},${y * 256 / steps},${z * 256 / steps})`)
-                        if (y % (canvasHeight / steps) === 0 && z === steps) { // check if there are 128 colors in the subColor array, if so, push it to the main colors array 
+                        if (y % (canvasHeight / steps) === 0 && z === steps) { // check if there are 128 colors in the subColors array, if so, push it to then colors array 
                             colors.push(subColors)
                             subColors = [];
                         }
                     }
                 }
             }
-
             return colors
-
         }
 
         // shuffle colors 
         function shuffleColors(colors) {
-
             for (let i = 1; i < colors.length; i++) {
                 for (let x = 1; x < colors[i].length; x++) {  //shuffle subColors
                     const y = Math.floor(Math.random() * (x + 1));
@@ -38,7 +34,7 @@ function Canvas() {
                 [colors[i], colors[j]] = [colors[j], colors[i]];
             }
 
-            console.log(colors);
+            // console.log(colors);
             return colors;
         }
 
@@ -46,7 +42,6 @@ function Canvas() {
         function drawCanvas(colors, canvasWidth, canvasHeight) {
             const canvas = canvasRef.current;
             const ctx = canvas.getContext('2d')
-
             for (let i = 0; i < canvasWidth; i++) {
                 for (let j = 0; j < canvasHeight; j++) {
                     ctx.fillStyle = colors[i][j];
@@ -55,18 +50,20 @@ function Canvas() {
             }
         }
 
-        drawCanvas(shuffleColors(generateColors(32, 128)), 256, 128) // colors with 32 steps. canvas width is 256px, height is 128px
+        // execute drawCanvas function
+        const steps = 32;
+        const canvasWidth = 256;
+        const canvasHeight = 128;
+        drawCanvas(shuffleColors(generateColors(steps, canvasHeight)), canvasWidth, canvasHeight)
 
     }, [])
 
 
     return (
         <div className="container">
-
             <canvas
                 ref={canvasRef}
             />
-
         </div>
     )
 }
